@@ -6,4 +6,8 @@ output:
 
 <br>
 
-  Hi, I’m Alexa, a master's student at Columbia University's Mailman School of Public Health. I am working toward a Master of Public Health in Epidemiology with a certificate in Epidemiology of Chronic Disease. My academic interests include environmental and occupational epidemiology, with a focus on understanding and addressing population-level health risks.
+  Hi, I’m Alexa, a master's student at Columbia University's Mailman School of Public Health. 
+  
+  I am working toward a Master of Public Health in Epidemiology with a certificate in Epidemiology of Chronic Disease. 
+  
+  My academic interests include environmental and occupational epidemiology, with a focus on understanding and addressing population-level health risks.

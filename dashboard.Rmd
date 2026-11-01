@@ -1,0 +1,92 @@
+---
+title: "Dashboard"
+
+---
+
+```{r include=FALSE}
+library(p8105.datasets)
+library(tidyverse)
+library(plotly)
+```
+
+```{r include=FALSE}
+data(rest_inspec)
+
+rest_df = rest_inspec |> 
+ rename(borough = boro) |> 
+  filter(
+    borough != "0",
+    grade %in% c("A", "B", "C")
+  )
+```
+<br>
+
+## Manhattan Restaurant Health Inspection Grades 
+```{r echo=FALSE}
+rest_df |> 
+  filter(
+    borough == "Manhattan",
+    !is.na(latitude), !is.na(longitude),
+    latitude != 0, longitude != 0
+  ) |> 
+  mutate(
+    text_label = str_c("Restaurant: ", dba, "\nGrade: ", grade)
+  ) |> 
+  plot_ly(
+    x = ~longitude, y = ~latitude, type = "scatter", mode = "markers",
+    color = ~grade, colors = "viridis", text = ~text_label, alpha = 0.5
+  )
+```
+
+
+## Percentage of Restaurants with C grades in Manhattan by Cuisine
+```{r echo=FALSE, out.width = "100%"}
+rest_df |> 
+  filter(borough == "Manhattan") |> 
+  mutate(
+    cuisine_description = recode(
+      cuisine_description, 
+      "Latin (Cuban, Dominican, Puerto Rican, South & Central American)" = "Latin",
+      "Ice Cream, Gelato, Yogurt, Ices" = "Frozen desserts"
+    )
+  ) |> 
+  group_by(cuisine_description) |> 
+  summarize(
+    total_n = n(),
+    c_count = sum(grade == "C", na.rm = TRUE),
+    percent_c = (c_count / total_n) * 100
+  ) |> 
+  filter(c_count > 0) |> 
+  mutate(cuisine_description = fct_reorder(cuisine_description, percent_c),
+    text_label = str_c(cuisine_description, ": ", round(percent_c, 2), "%")) |> 
+  plot_ly(x = ~cuisine_description, y = ~percent_c, type = "bar", color = ~cuisine_description, colors = "viridis", text = ~text_label,
+    hoverinfo = "text") |> 
+  layout(
+    xaxis = list(
+      title = "Cuisine",
+      tickangle = -45, 
+      tickfont = list(size = 7)  
+    ),
+    yaxis = list(
+      title = "Percentage of Restaurants with C Grades"
+    ))
+
+
+```
+
+## Distribution of Restaurant Health Inspection Scores Among Restaurants with C Grades Across Boroughs
+### (Higher Scores = More / Worse Violations)
+```{r echo=FALSE}
+rest_df |> 
+  mutate(borough = fct_reorder(borough, score)) |> 
+  filter(grade == "C",
+         score >= 0) |> 
+  plot_ly(y = ~score, color = ~borough,
+          type = "box", colors = "viridis") |> 
+  layout(
+    xaxis = list(
+      title = "Borough"),
+    yaxis = list(
+      title = "Health Inspection Score"
+    ))
+```

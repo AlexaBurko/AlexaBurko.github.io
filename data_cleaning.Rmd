@@ -1,0 +1,39 @@
+---
+title: "Data cleaning"
+author: "Alexa Burko"
+date: "2026-11-01"
+output: html_document
+---
+```{r}
+library(p8105.datasets)
+library(tidyverse)
+library(plotly)
+```
+
+```{r}
+data(rest_inspec)
+
+rest_df = rest_inspec |> 
+ rename(borough = boro) |> 
+  filter(
+    borough != "0",
+    grade %in% c("A", "B", "C")
+  )
+```
+
+```{r}
+rest_df |> 
+  filter(
+    borough == "Manhattan",
+    !is.na(latitude), !is.na(longitude),
+    latitude != 0, longitude != 0
+  ) |> 
+  mutate(
+    text_label = str_c("Restaurant: ", dba, "\nGrade: ", grade)
+  ) |> 
+  plot_ly(
+    x = ~longitude, y = ~latitude, type = "scatter", mode = "markers",
+    color = ~grade, text = ~text_label, alpha = 0.5
+  )
+```
+
