@@ -1,5 +1,4 @@
 ---
 title: "Plots"
-output: 
-  html_document:
+
 ---
