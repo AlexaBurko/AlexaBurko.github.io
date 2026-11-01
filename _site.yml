@@ -8,9 +8,9 @@ navbar:
     - text: "Plots"
       href: plots.html
     - icon: fa-envelope fa-lg
-      href: mailto:<you@youremail.com>
+      href: mailto:<burkoalexa@gmail.com>
     - icon: fa-github fa-lg
-      href: http://github.com/<YOUR_GH_NAME>/
+      href: http://github.com/AlexaBurko
 output:
   html_document:
-    theme: cerulean
+    theme: flatly
